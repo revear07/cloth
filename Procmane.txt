@@ -1,0 +1,17 @@
+pip install psutil
+ 
+import psutil 
+import time
+def monitor_bandwidth(interval=1):
+    print("Monitoring bandwidth usage (bytes/sec)...\n") 
+    while True:
+        io_counters = psutil.net_io_counters() 
+        sent1 = io_counters.bytes_sent
+        recv1 = io_counters.bytes_recv 
+        time.sleep(interval)
+        io_counters = psutil.net_io_counters() 
+        sent2 = io_counters.bytes_sent
+        recv2 = io_counters.bytes_recv
+        print(f"Upload: {(sent2 - sent1) / interval:.2f} B/s\tDownload: {(recv2 - recv1) / interval:.2f} B/s")
+# Run the monitor 
+monitor_bandwidth()
