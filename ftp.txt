@@ -1,0 +1,38 @@
+yum install vsftpd
+
+rpm -qa | grep vsftpd
+chkconfig vsftpd on
+vim /etc/vsftpd/vsftpd.conf
+
+Remove comment anon_upload_enable = yes
+
+service vsftpd start
+
+getsebool -a | grep ftp
+setsebool -P allow_ftpd_anon write on
+getsebool -a | grep ftp
+
+ls -ldZ /var/ftp/pub            #can be ld if not worked
+
+chgrp ftp /var/ftp/pub
+chown frp /var/ftp/pub
+ls -ldZ /var/ftp/pub
+
+cd /var/ftp/pub
+ls
+touch file
+
+cat > kiranftp.txt
+Welcome to all
+
+ls
+
+cd /var/ftp/pub
+chown ftp /var/ftp/pub
+ls -ldZ /var/ftp/pub
+
+service vsftpd restart
+
+ifconfig
+
+ftp://IP address shown in ifconfig

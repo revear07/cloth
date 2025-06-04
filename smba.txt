@@ -1,0 +1,61 @@
+yum install samba
+
+rpm -qa | grep samba
+
+#configuration
+
+pwd
+/home
+mkdir kiransmb
+cd kiransmb
+touch f1 f2 f3
+
+car>kiransamba/txt
+hello everyone
+ls
+
+vi /etc/samba/smb
+Workgroup = MYGROUP
+Uncomment line interface lo eth0 192.168.1.
+Hosts allow 192.168.1.
+at end of file Add
+[kiransmb]
+        comment= Kiran samba sharing Stuff
+        path = /home/kiransmb
+        public=yes
+        writable=yes
+        Browsesable=yes
+        write list = Administrator
+
+
+service smb start
+service smb restart
+chkconfig smb on
+testparm
+
+service iptables stop
+service iptables status
+
+sentenforce 0
+getsebool -a
+setsebool
+samba_enable_home_dirs=1
+
+getsebool -a
+
+useradd kiransmbuser
+smbpasswd -a kiransmbuser
+
+ifconfig
+
+smbclient
+//192.168.1.12/home/kiransmb -U kiransmbuser
+
+service smb restart
+
+chmod -R 777 /home/kiransmb
+#samba is configured
+ls
+
+pwd
+ls
