@@ -1,0 +1,54 @@
+rpm -qa | grep httpd
+
+pwd
+/var/www
+cd..
+pwd
+/var
+cd..
+
+pwd
+/
+cd var
+pwd
+/var
+cd www
+pwd
+/var/www
+mkdir virtual
+cde virtual
+pwd
+/var/www/virtual
+mkdir www.rkt.com
+pwd
+mkdir html
+pwd
+cd html
+vi index.html
+<html>
+<head>
+<title>The first page on apache on our domain
+
+<body>
+
+
+ls
+index.html
+ifconfig
+dig -x IP
+vim /etc/httpd/conf/httpd.conf
+virtuasl host
+serveradmin root@www.rkt.com
+Documentroot /var/www/virtual/www.rkt.com/html
+servername www.rkt.com
+errorlog logs/rkt.com-error_log
+customlog logs/rkt.com-access_log common
+
+remove comment of like in httpd.conf file
+NameVirtualHost  *:80
+
+change like /var/www/html to document root /var/www/virtual/www/rkt.com/html
+save changes
+
+httpd start
+chmod -R 777
