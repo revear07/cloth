@@ -1,0 +1,66 @@
+import os
+import random
+import time
+import csv
+from datetime import datetime
+
+# Directory to simulate device logs
+DEVICE_DIR = "simulated_iot_devices"
+os.makedirs(DEVICE_DIR, exist_ok=True)
+
+# Simulated IoT device class
+class SimulatedIoTDevice:
+   def __init__(self, device_id):
+     self.device_id = device_id
+     self.logfile = os.path.join(DEVICE_DIR, f"{device_id}_log.txt")
+
+   def generate_log_entry(self):
+     events = ["TEMP_OK", "TEMP_HIGH", "NETWORK_OK", "PACKET_DROP", "REBOOT", "CMD_EXEC"]
+     event = random.choice(events)
+     msg = f"{datetime.utcnow().isoformat()}Z [{self.device_id}] EVENT: {event}"
+     with open(self.logfile, "a") as f:
+       f.write(msg + "\n")
+
+   def get_memory_snapshot(self):
+      # Simulated memory usage (MB) and CPU percent
+      memory_usage = random.uniform(50, 150)
+      cpu_usage = random.uniform(5, 90)
+      snapshot = {
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "device_id": self.device_id,
+        "memory_mb": round(memory_usage, 2),
+        "cpu_percent": round(cpu_usage, 2)
+      }
+      return snapshot
+
+# Create sample devices
+devices = [SimulatedIoTDevice(f"iot_device_{i}") for i in range(1, 4)]
+
+# Generate fake logs for each device (10 entries each)
+for _ in range(10):
+    for device in devices:
+       device.generate_log_entry()
+    time.sleep(0.2)
+
+# "Extract" logs and memory data into a single CSV archive
+archive_csv = os.path.join(DEVICE_DIR, "iot_forensic_archive.csv")
+
+with open(archive_csv, "w", newline="") as csvfile:
+  fieldnames = ["timestamp", "device_id", "memory_mb", "cpu_percent", "log_line"]
+  writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+  writer.writeheader()
+
+  for device in devices:
+     with open(device.logfile, "r") as f:
+
+       for line in f:
+          snapshot = device.get_memory_snapshot()
+          writer.writerow({
+            "timestamp": snapshot["timestamp"],
+            "device_id": snapshot["device_id"],
+            "memory_mb": snapshot["memory_mb"],
+            "cpu_percent": snapshot["cpu_percent"],
+            "log_line": line.strip()
+          })
+
+print(f"✅ IoT forensic data safely archived in {archive_csv}")
