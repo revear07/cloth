@@ -1,0 +1,57 @@
+// --- Pin Definitions ---
+int pirPin = 13;// PIR Sensor Output Pin (Connected to GPIO 13)
+int ledPin = 2;// LED Pin (Connected to GPIO 2)
+int relayPin = 15; // Relay Pin (Connected to GPIO 15)
+
+// --- State Variable ---
+int motionState = LOW; // Tracks the current state of motion detection
+
+void setup() {
+  // Initialize Serial Communication for debugging
+  Serial.begin(115200);
+
+  // Set up pins as inputs or outputs
+  pinMode(pirPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(relayPin, OUTPUT);
+
+  // Ensure the LED and Relay are OFF initially
+  digitalWrite(ledPin, LOW);
+  digitalWrite(relayPin, LOW); 
+
+  Serial.println("Motion Detector Ready...");
+}
+
+void loop() {
+  // Read the state of the PIR sensor
+  int motion = digitalRead(pirPin);
+
+  if (motion == HIGH) {
+    // A rising edge (LOW to HIGH) means new motion is detected
+    if (motionState == LOW) {
+      Serial.println("Motion Detected!");
+      motionState = HIGH;
+    }
+
+    // --- Actions when Motion is Detected ---
+// Turn relay ON (to activate the connected device)
+    digitalWrite(relayPin, HIGH);
+
+    // Turn LED ON (as an indicator)
+    digitalWrite(ledPin, HIGH);
+
+  } else {
+    // A falling edge (HIGH to LOW) means no motion anymore
+    if (motionState == HIGH) {
+      Serial.println("No Motion...");
+      motionState = LOW;
+    }
+
+    // --- Actions when No Motion is Detected ---
+    // Turn everything OFF
+    digitalWrite(ledPin, LOW);
+    digitalWrite(relayPin, LOW);
+
+  }
+  // Optional: A small delay can be added here if needed, but the current code is fine for immediate response.
+}
